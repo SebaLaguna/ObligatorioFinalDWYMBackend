@@ -1,0 +1,1 @@
+Despues de instalar las dependencias (npm install, npm install express y npm install mongoose), correr 1 vez el index.js que se encuentra en la carpeta de seeds. Esto es un semillero para cargar la base de datos y poder probar las funcionalidades de las aplicaciones.
