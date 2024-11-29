@@ -1,7 +1,6 @@
 const Post = require("../models/Post");
 const multer = require("multer");
 
-// Configuración de Multer para la subida de imágenes
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/");
@@ -13,7 +12,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Subir publicación
 const uploadPost = async (req, res) => {
   const { caption } = req.body;
   try {
@@ -29,7 +27,6 @@ const uploadPost = async (req, res) => {
   }
 };
 
-// Obtener el feed
 const getFeed = async (req, res) => {
   try {
     const posts = await Post.find()
@@ -44,22 +41,18 @@ const likePost = async (req, res) => {
   try {
     const { postId } = req.params;
 
-    // Verificar si el post existe
     const post = await Post.findById(postId);
     if (!post) {
       return res.status(404).json({ message: "Post no encontrado" });
     }
 
-    // Comprobar si el usuario ya ha dado like al post
-    if (post.likes.includes(req.user.id)) {
+    if (post.likes.includes(req.user._id)) {
       return res.status(400).json({ message: "Ya has dado like a este post" });
     }
 
-    // Agregar el like al post
     post.likes.push(req.user.id);
     await post.save();
 
-    // Devolver el post actualizado
     res.status(200).json(post);
   } catch (error) {
     console.error(error);
@@ -76,13 +69,11 @@ const removeLike = async (req, res) => {
       return res.status(404).json({ message: "Post no encontrado" });
     }
 
-    // Comprobar si el usuario ya ha dado like al post
     const likeIndex = post.likes.indexOf(req.user.id);
     if (likeIndex === -1) {
       return res.status(400).json({ message: "No has dado like a este post" });
     }
 
-    // Eliminar el like del post
     post.likes.splice(likeIndex, 1);
     await post.save();
 

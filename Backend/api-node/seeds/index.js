@@ -33,11 +33,11 @@ const createUsers = async () => {
 // Función para crear publicaciones
 const createPosts = async (users) => {
   const posts = [];
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 7; i++) {
     const randomUser = users[Math.floor(Math.random() * users.length)];
     posts.push(new Post({
       user: randomUser._id,
-      imageUrl: `https://robohash.org/${i}.png`,
+      imageUrl: `uploads\\0${i}.jpeg`,
       caption: `Caption for post ${i}`,
     }));
   }

@@ -16,19 +16,16 @@ const createComment = async (req, res) => {
 
     // Crear el comentario
     const newComment = new Comment({
-      user: req.user.id, // ID del usuario autenticado
+      user: req.user.id,
       post: postId,
       content,
     });
 
-    // Guardar el comentario en la base de datos
     const savedComment = await newComment.save();
 
-    // Agregar el comentario al array de comentarios del post
     post.comments.push(savedComment._id);
     await post.save();
 
-    // Devolver el comentario creado
     res.status(201).json(savedComment);
   } catch (error) {
     console.error(error);
@@ -40,7 +37,6 @@ const getComment = async (req, res) => {
   try {
     const { commentId } = req.params;
 
-    // Buscar el comentario por su ID
     const comment = await Comment.findById(commentId).populate(
       "user",
       "username email"
@@ -65,7 +61,6 @@ const removeComment = async (req, res) => {
       return res.status(404).json({ message: "Post no encontrado" });
     }
 
-    // Verificar si el comentario existe y pertenece al usuario autenticado
     const comment = await Comment.findById(commentId);
     if (!comment) {
       return res.status(404).json({ message: "Comentario no encontrado" });
@@ -77,7 +72,6 @@ const removeComment = async (req, res) => {
         .json({ message: "No tienes permiso para eliminar este comentario" });
     }
 
-    // Eliminar el comentario de la base de datos
     await comment.remove();
 
     post.comments = post.comments.filter((id) => id.toString() !== commentId);
